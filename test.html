@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fomo Ticker Test</title>
+    <link rel="stylesheet" href="assets/fomo-ticker.css">
+</head>
+<body>
+    <h1>Fomo Ticker Extension Test</h1>
+    
+    <h2>Header Position Test</h2>
+    <fomo-ticker 
+        data-text-color="#ffffff"
+        data-background-color="#ff6b35"
+        data-border-color="#e55a2b"
+        data-text-size="14px"
+        data-height="48px"
+        data-speed="50"
+        data-position="header"
+        data-block-id="test-1"
+    ></fomo-ticker>
+
+    <div style="height: 200px; background: #f0f0f0; margin: 20px 0; padding: 20px;">
+        <p>This is sample content to test ticker positioning.</p>
+        <p>The ticker should appear at the top of the page (header position).</p>
+    </div>
+
+    <h2>Footer Position Test</h2>
+    <fomo-ticker 
+        data-text-color="#000000"
+        data-background-color="#00ff00"
+        data-border-color="#00cc00"
+        data-text-size="16px"
+        data-height="60px"
+        data-speed="30"
+        data-position="footer"
+        data-block-id="test-2"
+    ></fomo-ticker>
+
+    <div style="height: 200px; background: #e0e0e0; margin: 20px 0; padding: 20px;">
+        <p>This is more sample content.</p>
+        <p>The second ticker should appear at the bottom of the page (footer position).</p>
+    </div>
+
+    <script src="assets/fomo-ticker.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{%- if block.settings.enabled -%}
+<fomo-ticker 
+  data-text-color="{{ block.settings.text_color }}"
+  data-background-color="{{ block.settings.background_color }}"
+  data-border-color="{{ block.settings.border_color }}"
+  data-text-size="{{ block.settings.text_size }}"
+  data-height="{{ block.settings.height }}"
+  data-speed="{{ block.settings.speed }}"
+  data-position="{{ block.settings.position }}"
+  data-block-id="{{ block.id }}"
+>
+</fomo-ticker>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fomo Notification Ticker",
+  "target": "body",
+  "stylesheet": "fomo-ticker.css",
+  "javascript": "fomo-ticker.js",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Enable ticker",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color", 
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ff6b35"
+    },
+    {
+      "type": "color",
+      "id": "border_color", 
+      "label": "Border Color",
+      "default": "#e55a2b"
+    },
+    {
+      "type": "text",
+      "id": "text_size",
+      "label": "Text Size",
+      "default": "14px"
+    },
+    {
+      "type": "text",
+      "id": "height",
+      "label": "Bar Height", 
+      "default": "48px"
+    },
+    {
+      "type": "number",
+      "id": "speed",
+      "label": "Animation Speed",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "header",
+          "label": "Below Header"
+        },
+        {
+          "value": "footer", 
+          "label": "Above Footer"
+        }
+      ],
+      "default": "header"
+    }
+  ]
+}
+{% endschema %}
