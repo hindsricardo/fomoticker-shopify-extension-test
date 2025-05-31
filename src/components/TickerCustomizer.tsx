@@ -37,7 +37,7 @@ const TickerCustomizer: React.FC<TickerCustomizerProps> = ({
       borderColor: '#e55a2b',
       textSize: '14px',
       height: '48px',
-      speed: 50,
+      speed: 10,
       position: 'header'
     });
   };
