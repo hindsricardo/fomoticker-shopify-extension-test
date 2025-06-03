@@ -529,6 +529,15 @@
                 padding: 0.15rem 0.3rem;
                 height: 22px;
             }
+
+            .presets-grid {
+                gap: 0.2rem;
+            }
+
+            .preset-btn {
+                padding: 0.25rem 0.3rem;
+                font-size: 0.6rem;
+            }
         }
 
         .static-placement-indicator {
@@ -542,6 +551,43 @@
             color: #ff6b6b;
             display: none;
         }
+
+        .presets-section {
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .presets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 0.3rem;
+        }
+
+        .preset-btn {
+            background: #ffffff;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            padding: 0.3rem 0.4rem;
+            font-size: 0.65rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            color: #555;
+        }
+
+        .preset-btn:hover {
+            background: #f0f0f0;
+            border-color: #4299e1;
+            color: #4299e1;
+        }
+
+        .preset-btn.active {
+            background: #4299e1;
+            border-color: #4299e1;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -550,13 +596,13 @@
         data-text-color="#ffffff"
         data-background-color="#000000"
         data-border-color="#000000"
-        data-text-size="14px"
+        data-text-size="14"
         data-height="48px"
         data-speed="50"
         data-position="static"
         data-sticky="none"
         data-show-images="true"
-        data-show-separator="true"
+        data-show-separator="false"
         data-border-radius="6px"
         data-image-scale="1.0"
         data-gap-scale="1.0"
@@ -583,6 +629,18 @@
         <!-- Live Configurator Section -->
         <div class="configurator-section">
             <h3>🎛️ Live Ticker Config</h3>
+            
+            <!-- Presets Section -->
+            <div class="presets-section">
+                <div style="font-size: 0.7rem; font-weight: 500; margin-bottom: 0.4rem; color: #333; text-align: center;">Quick Presets</div>
+                <div class="presets-grid">
+                    <button class="preset-btn" data-preset="xsmall">XSmall</button>
+                    <button class="preset-btn" data-preset="small">Small</button>
+                    <button class="preset-btn" data-preset="medium">Medium</button>
+                    <button class="preset-btn" data-preset="large">Large</button>
+                </div>
+            </div>
+            
             <div class="controls-grid">
                 <div class="control-group">
                     <label for="textColor">Text</label>
@@ -654,7 +712,7 @@
                 </div>
                 <div class="control-group">
                     <label for="showSeparator">Show Separator</label>
-                    <input type="checkbox" id="showSeparator" checked>
+                    <input type="checkbox" id="showSeparator">
                 </div>
                 <div class="control-group">
                     <label for="imageScale">Image Scale</label>
@@ -869,6 +927,125 @@
             maxItemWidth: document.getElementById('maxItemWidth')
         };
 
+        // Define preset configurations
+        const presets = {
+            xsmall: {
+                textSize: 12,
+                height: 36,
+                showImages: false,
+                showSeparator: true,
+                gapScale: 0.7,
+                borderRadius: 4,
+                enableMaxWidth: false
+            },
+            small: {
+                textSize: 14,
+                height: 48,
+                showImages: true,
+                showSeparator: false,
+                imageScale: 1.0,
+                gapScale: 1.0,
+                borderRadius: 6,
+                enableMaxWidth: false
+            },
+            medium: {
+                textSize: 16,
+                height: 72,
+                showImages: true,
+                showSeparator: false,
+                imageScale: 1.2,
+                gapScale: 1.15,
+                borderRadius: 7,
+                enableMaxWidth: false
+            },
+            large: {
+                textSize: 20,
+                height: 260,
+                showImages: true,
+                showSeparator: false,
+                imageScale: 2,
+                gapScale: 1.3,
+                borderRadius: 8,
+                enableMaxWidth: true,
+                maxItemWidth: 440
+            }
+        };
+
+        function applyPreset(presetName) {
+            const preset = presets[presetName];
+            if (!preset) return;
+
+            // Apply preset values to controls
+            controls.textSize.value = preset.textSize;
+            controls.height.value = preset.height;
+            controls.imageScale.value = preset.imageScale;
+            controls.gapScale.value = preset.gapScale;
+            controls.borderRadius.value = preset.borderRadius;
+            controls.enableMaxWidth.checked = preset.enableMaxWidth;
+            
+            // Apply showImages setting from preset
+            controls.showImages.checked = preset.showImages;
+            
+            // Apply showSeparator setting from preset
+            controls.showSeparator.checked = preset.showSeparator;
+            
+            // Apply maxItemWidth if enableMaxWidth is true and maxItemWidth is defined
+            if (preset.enableMaxWidth && preset.maxItemWidth) {
+                controls.maxItemWidth.value = parseInt(preset.maxItemWidth);
+            }
+
+            // Update ticker and displays
+            updateTicker();
+            updateRangeDisplays();
+            updateMaxWidthVisibility();
+
+            // Update active preset button
+            updateActivePreset(presetName);
+        }
+
+        function updateActivePreset(activePreset = null) {
+            const presetBtns = document.querySelectorAll('.preset-btn');
+            
+            if (activePreset) {
+                // Set active preset
+                presetBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-preset') === activePreset) {
+                        btn.classList.add('active');
+                    }
+                });
+            } else {
+                // Check if current settings match any preset
+                let matchingPreset = null;
+                for (const [presetName, preset] of Object.entries(presets)) {
+                    const matches = 
+                        parseInt(controls.textSize.value) === preset.textSize &&
+                        parseInt(controls.height.value) === preset.height &&
+                        parseFloat(controls.imageScale.value) === preset.imageScale &&
+                        parseFloat(controls.gapScale.value) === preset.gapScale &&
+                        parseInt(controls.borderRadius.value) === preset.borderRadius &&
+                        controls.enableMaxWidth.checked === preset.enableMaxWidth &&
+                        controls.showImages.checked === preset.showImages &&
+                        controls.showSeparator.checked === preset.showSeparator &&
+                        // If enableMaxWidth is true, also check maxItemWidth
+                        (!preset.enableMaxWidth || !preset.maxItemWidth || 
+                         parseInt(controls.maxItemWidth.value) === parseInt(preset.maxItemWidth));
+                    
+                    if (matches) {
+                        matchingPreset = presetName;
+                        break;
+                    }
+                }
+
+                presetBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (matchingPreset && btn.getAttribute('data-preset') === matchingPreset) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        }
+
         function updateTicker() {
             // Update ticker attributes to trigger the component's built-in styling
             ticker.setAttribute('data-text-color', controls.textColor.value);
@@ -1081,11 +1258,21 @@
                 updateTicker();
                 updateRangeDisplays();
                 updateMaxWidthVisibility();
+                updateActivePreset();
             });
             control.addEventListener('change', () => {
                 updateTicker();
                 updateRangeDisplays();
                 updateMaxWidthVisibility();
+                updateActivePreset();
+            });
+        });
+
+        // Add preset button event listeners
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const presetName = btn.getAttribute('data-preset');
+                applyPreset(presetName);
             });
         });
 
@@ -1093,6 +1280,7 @@
         updateTicker();
         updateRangeDisplays();
         updateMaxWidthVisibility();
+        updateActivePreset();
     </script>
 </body>
 </html>

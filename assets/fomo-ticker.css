@@ -70,8 +70,9 @@ fomo-ticker[data-position="footer"] {
 }
 
 .fomo-ticker__separator {
-  display: var(--fomo-show-separator, inline);
+  display: inline;
   color: inherit;
+  opacity: var(--fomo-show-separator, 1);
 }
 
 @keyframes marquee {

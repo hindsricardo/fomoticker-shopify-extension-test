@@ -40,7 +40,7 @@ class FomoTicker extends HTMLElement {
     const speed = parseInt(this.dataset.speed) || 50;
     const fontFamily = this.dataset.fontFamily || 'inherit';
     const showImages = this.dataset.showImages !== 'false'; // Default to true
-    const showSeparator = this.dataset.showSeparator !== 'false'; // Default to true
+    const showSeparator = this.dataset.showSeparator === 'true'; // Default to false
     const borderRadius = this.dataset.borderRadius || '6px';
     const imageScale = parseFloat(this.dataset.imageScale) || 1.0; // Default to 1.0 (no scaling)
     const gapScale = parseFloat(this.dataset.gapScale) || 1.0; // Default to 1.0 (no scaling)
@@ -72,7 +72,7 @@ class FomoTicker extends HTMLElement {
     this.style.setProperty('--fomo-border-radius', borderRadius);
     this.style.setProperty('--fomo-hover-bg-color', hoverBgColor);
     this.style.setProperty('--fomo-show-images', showImages ? 'inline-flex' : 'none');
-    this.style.setProperty('--fomo-show-separator', showSeparator ? 'inline' : 'none');
+    this.style.setProperty('--fomo-show-separator', showSeparator ? '1' : '0');
     this.style.setProperty('--fomo-max-item-width', maxItemWidth || 'none');
 
     const content = this.querySelector('.fomo-ticker__content');
@@ -306,7 +306,6 @@ class FomoTicker extends HTMLElement {
       });
       
       // Use configurable separator
-      const showSeparator = this.dataset.showSeparator !== 'false'; // Default to true
       const separator = showSeparator ? ' <span class="fomo-ticker__separator">•</span> ' : ' ';
       const tickerHTML = notificationLinks.join(separator);
       content.innerHTML = `${tickerHTML}${separator}${tickerHTML}`;
