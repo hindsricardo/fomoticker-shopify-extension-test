@@ -559,6 +559,11 @@
         data-height="48px"
         data-speed="50"
         data-position="static"
+        data-show-images="true"
+        data-show-separator="true"
+        data-border-radius="6px"
+        data-image-scale="1.0"
+        data-gap-scale="1.0"
     ></fomo-ticker>
 
     <header class="header">
@@ -639,13 +644,43 @@
                 </div>
                 <div class="control-group">
                     <label for="height">Height</label>
-                    <input type="range" id="height" min="32" max="64" value="48">
+                    <input type="range" id="height" min="32" max="260" value="48">
                     <div class="range-display" id="heightDisplay">48px</div>
                 </div>
                 <div class="control-group">
                     <label for="speed">Speed</label>
                     <input type="range" id="speed" min="20" max="80" value="50">
                     <div class="range-display" id="speedDisplay">50</div>
+                </div>
+                <div class="control-group">
+                    <label for="showImages">Show Images</label>
+                    <input type="checkbox" id="showImages" checked>
+                </div>
+                <div class="control-group">
+                    <label for="showSeparator">Show Separator</label>
+                    <input type="checkbox" id="showSeparator" checked>
+                </div>
+                <div class="control-group">
+                    <label for="imageScale">Image Scale</label>
+                    <input type="range" id="imageScale" min="0.5" max="2.5" step="0.1" value="1.0">
+                    <div class="range-display" id="imageScaleDisplay">1.0x</div>
+                </div>
+                <div class="control-group">
+                    <label for="gapScale">Gap Scale</label>
+                    <input type="range" id="gapScale" min="0.5" max="3.0" step="0.1" value="1.0">
+                    <div class="range-display" id="gapScaleDisplay">1.0x</div>
+                </div>
+                <div class="control-group">
+                    <label for="borderRadius">Image Radius</label>
+                    <input type="range" id="borderRadius" min="0" max="20" value="6">
+                    <div class="range-display" id="borderRadiusDisplay">6px</div>
+                </div>
+                <div class="control-group">
+                    <label for="maxItemWidth">Max Item Width</label>
+                    <input type="number" id="maxItemWidth" placeholder="auto" min="100" max="800" step="10">
+                </div>
+                <div style="font-size: 0.6rem; color: #666; margin: -0.2rem 0 0.4rem 0; padding-left: 65px;">
+                    Leave empty for auto-width items
                 </div>
             </div>
 
@@ -823,7 +858,13 @@
             textSize: document.getElementById('textSize'),
             height: document.getElementById('height'),
             speed: document.getElementById('speed'),
-            fontFamily: document.getElementById('fontFamily')
+            fontFamily: document.getElementById('fontFamily'),
+            showImages: document.getElementById('showImages'),
+            showSeparator: document.getElementById('showSeparator'),
+            imageScale: document.getElementById('imageScale'),
+            gapScale: document.getElementById('gapScale'),
+            borderRadius: document.getElementById('borderRadius'),
+            maxItemWidth: document.getElementById('maxItemWidth')
         };
 
         function updateTicker() {
@@ -835,6 +876,18 @@
             ticker.setAttribute('data-height', controls.height.value + 'px');
             ticker.setAttribute('data-speed', controls.speed.value);
             ticker.setAttribute('data-position', controls.position.value);
+            ticker.setAttribute('data-show-images', controls.showImages.checked);
+            ticker.setAttribute('data-show-separator', controls.showSeparator.checked);
+            ticker.setAttribute('data-image-scale', controls.imageScale.value);
+            ticker.setAttribute('data-gap-scale', controls.gapScale.value);
+            ticker.setAttribute('data-border-radius', controls.borderRadius.value + 'px');
+            
+            // Set max item width if provided, otherwise remove the attribute
+            if (controls.maxItemWidth.value.trim()) {
+                ticker.setAttribute('data-max-item-width', controls.maxItemWidth.value + 'px');
+            } else {
+                ticker.removeAttribute('data-max-item-width');
+            }
             
             // Set font family if provided, otherwise remove the attribute to use default
             if (controls.fontFamily.value.trim()) {
@@ -902,6 +955,15 @@
             code += `  data-height="${controls.height.value}px"\n`;
             code += `  data-speed="${controls.speed.value}"\n`;
             code += `  data-position="${controls.position.value}"`;
+            code += `\n  data-show-images="${controls.showImages.checked}"`;
+            code += `\n  data-show-separator="${controls.showSeparator.checked}"`;
+            code += `\n  data-image-scale="${controls.imageScale.value}"`;
+            code += `\n  data-gap-scale="${controls.gapScale.value}"`;
+            code += `\n  data-border-radius="${controls.borderRadius.value}px"`;
+            
+            if (controls.maxItemWidth.value.trim()) {
+                code += `\n  data-max-item-width="${controls.maxItemWidth.value}px"`;
+            }
             
             if (controls.fontFamily.value.trim()) {
                 code += `\n  data-font-family="${controls.fontFamily.value.trim()}"`;
@@ -974,6 +1036,9 @@
             document.getElementById('textSizeDisplay').textContent = controls.textSize.value + 'px';
             document.getElementById('heightDisplay').textContent = controls.height.value + 'px';
             document.getElementById('speedDisplay').textContent = controls.speed.value;
+            document.getElementById('imageScaleDisplay').textContent = controls.imageScale.value + 'x';
+            document.getElementById('gapScaleDisplay').textContent = controls.gapScale.value + 'x';
+            document.getElementById('borderRadiusDisplay').textContent = controls.borderRadius.value + 'px';
         }
 
         function copyCode() {

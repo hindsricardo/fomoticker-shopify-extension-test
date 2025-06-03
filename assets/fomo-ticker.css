@@ -24,7 +24,7 @@ fomo-ticker[data-position="footer"] {
   white-space: nowrap;
   animation: marquee linear infinite;
   font-weight: 500;
-  gap: 10px;
+  gap: var(--fomo-content-gap, 10px);
   cursor: default;
 }
 
@@ -34,7 +34,10 @@ fomo-ticker[data-position="footer"] {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--fomo-link-gap, 8px);
+  max-width: var(--fomo-max-item-width, none);
+  flex-shrink: 0;
+  white-space: normal;
 }
 
 .fomo-ticker__link:hover {
@@ -49,16 +52,22 @@ fomo-ticker[data-position="footer"] {
 }
 
 .fomo-ticker__image {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+  width: var(--fomo-image-size, 24px);
+  height: var(--fomo-image-size, 24px);
+  border-radius: var(--fomo-border-radius, 6px);
   object-fit: cover;
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  display: var(--fomo-show-images, inline-flex);
 }
 
 .fomo-ticker__text {
-  white-space: nowrap;
+  display: block;
+}
+
+.fomo-ticker__separator {
+  display: var(--fomo-show-separator, inline);
+  color: inherit;
 }
 
 @keyframes marquee {

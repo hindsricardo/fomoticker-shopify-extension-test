@@ -35,18 +35,39 @@ class FomoTicker extends HTMLElement {
     const textColor = this.dataset.textColor || '#ffffff';
     const backgroundColor = this.dataset.backgroundColor || '#ff6b35';
     const borderColor = this.dataset.borderColor || '#e55a2b';
-    const textSize = this.dataset.textSize || '14px';
+    const textSize = parseInt(this.dataset.textSize) || 14;
     const height = this.dataset.height || '48px';
     const speed = parseInt(this.dataset.speed) || 50;
     const fontFamily = this.dataset.fontFamily || 'inherit';
+    const showImages = this.dataset.showImages !== 'false'; // Default to true
+    const showSeparator = this.dataset.showSeparator !== 'false'; // Default to true
+    const borderRadius = this.dataset.borderRadius || '6px';
+    const imageScale = parseFloat(this.dataset.imageScale) || 1.0; // Default to 1.0 (no scaling)
+    const gapScale = parseFloat(this.dataset.gapScale) || 1.0; // Default to 1.0 (no scaling)
+    const maxItemWidth = this.dataset.maxItemWidth || ''; // Default to empty (auto width)
+
+    // Calculate proportional sizes based on font size
+    const baseImageSize = Math.round(textSize * 2); // Base images are 2x the font size
+    const imageSize = Math.round(baseImageSize * imageScale); // Apply user scaling
+    const contentGap = Math.round(textSize * 1 * gapScale); // Gap is 1x the font size, scaled by gapScale
+    const linkGap = Math.round(textSize * 0.6 * gapScale); // Gap between image and text is 0.6x font size, scaled by gapScale
 
     this.style.backgroundColor = backgroundColor;
     this.style.borderColor = borderColor;
     this.style.height = height;
     this.style.color = textColor;
-    this.style.fontSize = textSize;
+    this.style.fontSize = textSize + 'px';
     // Use custom font family if provided, otherwise inherit from parent website
     this.style.fontFamily = fontFamily;
+
+    // Set CSS custom properties for dynamic sizing
+    this.style.setProperty('--fomo-image-size', imageSize + 'px');
+    this.style.setProperty('--fomo-content-gap', contentGap + 'px');
+    this.style.setProperty('--fomo-link-gap', linkGap + 'px');
+    this.style.setProperty('--fomo-border-radius', borderRadius);
+    this.style.setProperty('--fomo-show-images', showImages ? 'inline-flex' : 'none');
+    this.style.setProperty('--fomo-show-separator', showSeparator ? 'inline' : 'none');
+    this.style.setProperty('--fomo-max-item-width', maxItemWidth || 'none');
 
     const content = this.querySelector('.fomo-ticker__content');
     if (content) {
@@ -233,8 +254,12 @@ class FomoTicker extends HTMLElement {
         const imageHtml = n.image ? `<img src="${n.image}" alt="Product" class="fomo-ticker__image">` : '';
         return `<a href="${n.url}" class="fomo-ticker__link">${imageHtml}<span class="fomo-ticker__text">${n.message}</span></a>`;
       });
-      const tickerHTML = notificationLinks.join(' • ');
-      content.innerHTML = `${tickerHTML} • ${tickerHTML}`;
+      
+      // Use configurable separator
+      const showSeparator = this.dataset.showSeparator !== 'false'; // Default to true
+      const separator = showSeparator ? ' <span class="fomo-ticker__separator">•</span> ' : ' ';
+      const tickerHTML = notificationLinks.join(separator);
+      content.innerHTML = `${tickerHTML}${separator}${tickerHTML}`;
       
       // Apply styles to newly created links
       this.applyStyles();
