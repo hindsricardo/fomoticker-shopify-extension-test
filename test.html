@@ -3,46 +3,1284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fomo Ticker Test</title>
+    <title>FomoTech - Ticker Demo</title>
     <link rel="stylesheet" href="assets/fomo-ticker.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1rem 0;
+            margin: 0;
+        }
+
+        .nav {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .cta-button:hover {
+            background: #0056b3;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 3rem 0 1rem 0;
+            color: #2a2a2a;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .configurator-section {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 260px;
+            max-height: calc(100vh - 20px);
+            padding: 0.6rem;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+        }
+
+        .configurator-section h3 {
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .controls-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 24px;
+        }
+
+        .control-group label {
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #555;
+            min-width: 60px;
+            flex-shrink: 0;
+        }
+
+        .control-group input,
+        .control-group select {
+            padding: 0.15rem 0.3rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            flex: 1;
+            height: 22px;
+        }
+
+        .control-group input[type="color"] {
+            width: 60px;
+            height: 24px;
+            padding: 1px;
+            cursor: pointer;
+            flex: none;
+        }
+
+        .control-group input[type="range"] {
+            flex: 1;
+            margin: 0;
+        }
+
+        .range-display {
+            font-size: 0.6rem;
+            color: #666;
+            min-width: 30px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .control-half {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .control-half label {
+            min-width: 40px;
+            font-size: 0.65rem;
+        }
+
+        .control-half input,
+        .control-half select {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.3rem;
+            height: 22px;
+        }
+
+        .code-section {
+            background: #f1f3f4;
+            border-radius: 4px;
+            padding: 0.4rem;
+            margin-top: 0.5rem;
+        }
+
+        .code-section strong {
+            font-size: 0.7rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .code-output {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 0.3rem;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.55rem;
+            overflow-x: auto;
+            white-space: pre;
+            margin-top: 0.2rem;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            margin-top: 0.3rem;
+            width: 100%;
+            height: 24px;
+        }
+
+        .copy-btn:hover {
+            background: #3182ce;
+        }
+
+        .demo-section {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .demo-section h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .demo-section p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature {
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .feature h4 {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #2a2a2a;
+        }
+
+        .feature p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .content-section {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .content-section h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .content-section p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .testimonial {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .testimonial p {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .testimonial-author {
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .step {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #333;
+            color: white;
+            border-radius: 50%;
+            line-height: 40px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            background: #f8f8f8;
+            border-top: 1px solid #e0e0e0;
+            padding: 3rem 0 2rem;
+            margin: 0;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-section a:hover {
+            color: #333;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+                margin: 0;
+            }
+
+            .header {
+                margin: -20px -15px 20px -15px;
+                padding: 1rem 15px;
+            }
+
+            .footer {
+                margin: 4rem -15px -20px -15px;
+                padding: 3rem 15px 2rem;
+            }
+
+            .footer-content {
+                padding: 0 15px;
+            }
+
+            .nav {
+                padding: 0 15px;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                font-size: 0.9rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .configurator-section {
+                top: 10px;
+                right: 10px;
+                width: 260px;
+                max-height: calc(100vh - 20px);
+                padding: 0.6rem;
+            }
+
+            .configurator-section h3 {
+                font-size: 0.8rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .controls-grid {
+                gap: 0.3rem;
+            }
+
+            .control-group label {
+                font-size: 0.65rem;
+                min-width: 60px;
+            }
+
+            .control-group input,
+            .control-group select {
+                font-size: 0.65rem;
+                padding: 0.15rem 0.3rem;
+                height: 22px;
+            }
+
+            .range-display {
+                font-size: 0.6rem;
+                min-width: 30px;
+            }
+
+            .code-output {
+                font-size: 0.5rem;
+                max-height: 60px;
+            }
+
+            .copy-btn {
+                font-size: 0.6rem;
+                padding: 0.15rem 0.3rem;
+                height: 22px;
+            }
+
+            .presets-grid {
+                gap: 0.2rem;
+            }
+
+            .preset-btn {
+                padding: 0.25rem 0.3rem;
+                font-size: 0.6rem;
+            }
+        }
+
+        .static-placement-indicator {
+            margin: 10px 0;
+            padding: 8px 12px;
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px dashed #ff6b6b;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 12px;
+            color: #ff6b6b;
+            display: none;
+        }
+
+        .presets-section {
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .presets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 0.3rem;
+        }
+
+        .preset-btn {
+            background: #ffffff;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            padding: 0.3rem 0.4rem;
+            font-size: 0.65rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            color: #555;
+        }
+
+        .preset-btn:hover {
+            background: #f0f0f0;
+            border-color: #4299e1;
+            color: #4299e1;
+        }
+
+        .preset-btn.active {
+            background: #4299e1;
+            border-color: #4299e1;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h1>Fomo Ticker Extension Test</h1>
-    
-    <h2>Header Position Test</h2>
-    <fomo-ticker 
+    <!-- Single FOMO Ticker for testing -->
+    <fomo-ticker id="fomo-ticker"
         data-text-color="#ffffff"
-        data-background-color="#ff6b35"
-        data-border-color="#e55a2b"
-        data-text-size="14px"
+        data-background-color="#000000"
+        data-border-color="#000000"
+        data-text-size="14"
         data-height="48px"
         data-speed="50"
-        data-position="header"
-        data-block-id="test-1"
+        data-position="static"
+        data-sticky="none"
+        data-show-images="true"
+        data-show-separator="false"
+        data-border-radius="6px"
+        data-image-scale="1.0"
+        data-gap-scale="1.0"
     ></fomo-ticker>
 
-    <div style="height: 200px; background: #f0f0f0; margin: 20px 0; padding: 20px;">
-        <p>This is sample content to test ticker positioning.</p>
-        <p>The ticker should appear at the top of the page (header position).</p>
-    </div>
+    <header class="header">
+        <div class="nav">
+            <a href="#" class="logo">🛍️ Amazing Store</a>
+            <ul class="nav-links">
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
 
-    <h2>Footer Position Test</h2>
-    <fomo-ticker 
-        data-text-color="#000000"
-        data-background-color="#00ff00"
-        data-border-color="#00cc00"
-        data-text-size="16px"
-        data-height="60px"
-        data-speed="30"
-        data-position="footer"
-        data-block-id="test-2"
-    ></fomo-ticker>
+    <main class="container">
+        <section class="hero">
+            <h2>Welcome to Our Store!</h2>
+            <p>Discover amazing products with unbeatable prices</p>
+            <button class="cta-button">Shop Now</button>
+        </section>
 
-    <div style="height: 200px; background: #e0e0e0; margin: 20px 0; padding: 20px;">
-        <p>This is more sample content.</p>
-        <p>The second ticker should appear at the bottom of the page (footer position).</p>
-    </div>
+        <!-- Live Configurator Section -->
+        <div class="configurator-section">
+            <h3>🎛️ Live Ticker Config</h3>
+            
+            <!-- Presets Section -->
+            <div class="presets-section">
+                <div style="font-size: 0.7rem; font-weight: 500; margin-bottom: 0.4rem; color: #333; text-align: center;">Quick Presets</div>
+                <div class="presets-grid">
+                    <button class="preset-btn" data-preset="xsmall">XSmall</button>
+                    <button class="preset-btn" data-preset="small">Small</button>
+                    <button class="preset-btn" data-preset="medium">Medium</button>
+                    <button class="preset-btn" data-preset="large">Large</button>
+                </div>
+            </div>
+            
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="textColor">Text</label>
+                    <input type="color" id="textColor" value="#ffffff">
+                </div>
+                <div class="control-group">
+                    <label for="bgColor">Background</label>
+                    <input type="color" id="bgColor" value="#000000">
+                </div>
+                <div class="control-group">
+                    <label for="borderColor">Border</label>
+                    <input type="color" id="borderColor" value="#000000">
+                </div>
+                <div class="control-group">
+                    <label for="fontFamily">Font</label>
+                    <input type="text" id="fontFamily" placeholder="inherit" value="">
+                </div>
+                <div style="font-size: 0.6rem; color: #666; margin: -0.2rem 0 0.4rem 0; padding-left: 65px;">
+                    Try "Space Mono" to see the font change
+                </div>
+                <div class="control-group">
+                    <label for="position">Position</label>
+                    <select id="position">
+                        <option value="static" selected>Static (Inline)</option>
+                        <option value="fixed">Fixed (Floating)</option>
+                    </select>
+                </div>
+                <div class="control-group" id="fixedPositionGroup" style="display: none;">
+                    <label for="fixedPosition">Location</label>
+                    <select id="fixedPosition">
+                        <option value="top" selected>Top</option>
+                        <option value="bottom">Bottom</option>
+                    </select>
+                </div>
+                <div class="control-group" id="staticPositionGroup">
+                    <label for="staticPosition">Placement</label>
+                    <select id="staticPosition">
+                        <option value="after-header" selected>After Header</option>
+                        <option value="after-content">After Main Content</option>
+                        <option value="before-footer">Before Footer</option>
+                    </select>
+                </div>
+                <div class="control-group" id="stickyGroup">
+                    <label for="sticky">Sticky</label>
+                    <select id="sticky">
+                        <option value="none" selected>No Sticky</option>
+                        <option value="top">Stick to Top</option>
+                        <option value="bottom">Stick to Bottom</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="textSize">Size</label>
+                    <input type="range" id="textSize" min="10" max="20" value="14">
+                    <div class="range-display" id="textSizeDisplay">14px</div>
+                </div>
+                <div class="control-group">
+                    <label for="height">Height</label>
+                    <input type="range" id="height" min="32" max="260" value="48">
+                    <div class="range-display" id="heightDisplay">48px</div>
+                </div>
+                <div class="control-group">
+                    <label for="speed">Speed</label>
+                    <input type="range" id="speed" min="20" max="80" value="50">
+                    <div class="range-display" id="speedDisplay">50</div>
+                </div>
+                <div class="control-group">
+                    <label for="showImages">Show Images</label>
+                    <input type="checkbox" id="showImages" checked>
+                </div>
+                <div class="control-group">
+                    <label for="showSeparator">Show Separator</label>
+                    <input type="checkbox" id="showSeparator">
+                </div>
+                <div class="control-group">
+                    <label for="imageScale">Image Scale</label>
+                    <input type="range" id="imageScale" min="0.5" max="2.5" step="0.1" value="1.0">
+                    <div class="range-display" id="imageScaleDisplay">1.0x</div>
+                </div>
+                <div class="control-group">
+                    <label for="gapScale">Gap Scale</label>
+                    <input type="range" id="gapScale" min="0.5" max="3.0" step="0.1" value="1.0">
+                    <div class="range-display" id="gapScaleDisplay">1.0x</div>
+                </div>
+                <div class="control-group">
+                    <label for="borderRadius">Radius</label>
+                    <input type="range" id="borderRadius" min="0" max="20" value="6">
+                    <div class="range-display" id="borderRadiusDisplay">6px</div>
+                </div>
+                <div class="control-group">
+                    <label for="enableMaxWidth">Max Item Width</label>
+                    <input type="checkbox" id="enableMaxWidth">
+                </div>
+                <div class="control-group" id="maxWidthSliderGroup" style="display: none;">
+                    <label for="maxItemWidth">Width</label>
+                    <input type="range" id="maxItemWidth" min="100" max="600" step="10" value="300">
+                    <div class="range-display" id="maxItemWidthDisplay">300px</div>
+                </div>
+                <div style="font-size: 0.6rem; color: #666; margin: -0.2rem 0 0.4rem 0; padding-left: 65px;">
+                    Enable to limit each item's width
+                </div>
+            </div>
+
+            <div class="code-section">
+                <strong>Generated Code:</strong>
+                <div class="code-output" id="codeOutput"></div>
+                <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+            </div>
+        </div>
+
+        <section class="features">
+            <div class="feature">
+                <h3>🚚 Free Shipping</h3>
+                <p>On orders over $50</p>
+            </div>
+            <div class="feature">
+                <h3>💯 Quality Guarantee</h3>
+                <p>30-day money back</p>
+            </div>
+            <div class="feature">
+                <h3>⚡ Fast Delivery</h3>
+                <p>Same day delivery available</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Featured Products</h2>
+            <div class="features">
+                <div class="feature">
+                    <h4>🎧 Wireless Headphones</h4>
+                    <p><strong>$89.99</strong></p>
+                    <p>Premium sound quality with active noise cancellation. Perfect for music lovers and professionals.</p>
+                    <button class="cta-button" style="margin-top: 1rem;">Add to Cart</button>
+                </div>
+                <div class="feature">
+                    <h4>📱 Smart Phone Case</h4>
+                    <p><strong>$24.99</strong></p>
+                    <p>Durable protection with wireless charging compatibility. Available in 8 different colors.</p>
+                    <button class="cta-button" style="margin-top: 1rem;">Add to Cart</button>
+                </div>
+                <div class="feature">
+                    <h4>⌚ Fitness Tracker</h4>
+                    <p><strong>$129.99</strong></p>
+                    <p>Track your health and fitness goals with this advanced wearable technology device.</p>
+                    <button class="cta-button" style="margin-top: 1rem;">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Customer Testimonials</h2>
+            <div class="testimonial">
+                <p>"Amazing products and incredible customer service! I've been shopping here for 2 years and never had a bad experience. The quality is consistently excellent."</p>
+                <div class="testimonial-author">- Sarah Johnson, Verified Buyer</div>
+            </div>
+            <div class="testimonial">
+                <p>"Fast shipping and exactly as described. The wireless headphones I bought here have been working perfectly for 6 months. Highly recommend this store!"</p>
+                <div class="testimonial-author">- Mike Chen, Verified Buyer</div>
+            </div>
+            <div class="testimonial">
+                <p>"Love the variety of products and competitive prices. The FOMO ticker actually helped me discover some great deals I wouldn't have noticed otherwise."</p>
+                <div class="testimonial-author">- Emma Rodriguez, Verified Buyer</div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>About Our Store</h2>
+            <p>Founded in 2020, Amazing Store has been committed to bringing you the latest technology and lifestyle products at unbeatable prices. We believe that everyone deserves access to high-quality products that enhance their daily lives.</p>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Browse Products</h4>
+                    <p>Explore our curated selection of premium products across multiple categories.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Add to Cart</h4>
+                    <p>Found something you love? Add it to your cart and continue shopping or proceed to checkout.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Fast Delivery</h4>
+                    <p>We'll process your order quickly and get it to you within 2-3 business days.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Popular Categories</h2>
+            <div class="features">
+                <div class="feature">
+                    <h4>📱 Electronics</h4>
+                    <p>Latest smartphones, tablets, and accessories from top brands worldwide.</p>
+                </div>
+                <div class="feature">
+                    <h4>🏠 Home & Garden</h4>
+                    <p>Transform your living space with our collection of home improvement products.</p>
+                </div>
+                <div class="feature">
+                    <h4>👕 Fashion</h4>
+                    <p>Trendy clothing and accessories for every style and occasion.</p>
+                </div>
+                <div class="feature">
+                    <h4>🏃‍♂️ Sports & Fitness</h4>
+                    <p>Gear up for your active lifestyle with premium sports equipment.</p>
+                </div>
+                <div class="feature">
+                    <h4>🎨 Arts & Crafts</h4>
+                    <p>Unleash your creativity with our extensive arts and crafts supplies.</p>
+                </div>
+                <div class="feature">
+                    <h4>📚 Books & Media</h4>
+                    <p>Discover new worlds with our collection of books, movies, and games.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#careers">Careers</a></li>
+                    <li><a href="#press">Press</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#integrations">Integrations</a></li>
+                    <li><a href="#api">API Docs</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#help">Help Center</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                    <li><a href="#status">Status</a></li>
+                    <li><a href="#community">Community</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#security">Security</a></li>
+                    <li><a href="#gdpr">GDPR</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 FomoTech. All rights reserved. | Made with ❤️ in San Francisco</p>
+        </div>
+    </footer>
 
     <script src="assets/fomo-ticker.js"></script>
+    <script>
+        const ticker = document.getElementById('fomo-ticker');
+        const controls = {
+            textColor: document.getElementById('textColor'),
+            bgColor: document.getElementById('bgColor'),
+            borderColor: document.getElementById('borderColor'),
+            position: document.getElementById('position'),
+            fixedPosition: document.getElementById('fixedPosition'),
+            staticPosition: document.getElementById('staticPosition'),
+            sticky: document.getElementById('sticky'),
+            textSize: document.getElementById('textSize'),
+            height: document.getElementById('height'),
+            speed: document.getElementById('speed'),
+            fontFamily: document.getElementById('fontFamily'),
+            showImages: document.getElementById('showImages'),
+            showSeparator: document.getElementById('showSeparator'),
+            imageScale: document.getElementById('imageScale'),
+            gapScale: document.getElementById('gapScale'),
+            borderRadius: document.getElementById('borderRadius'),
+            enableMaxWidth: document.getElementById('enableMaxWidth'),
+            maxItemWidth: document.getElementById('maxItemWidth')
+        };
+
+        // Define preset configurations
+        const presets = {
+            xsmall: {
+                textSize: 12,
+                height: 36,
+                showImages: false,
+                showSeparator: true,
+                gapScale: 0.7,
+                borderRadius: 4,
+                enableMaxWidth: false
+            },
+            small: {
+                textSize: 14,
+                height: 48,
+                showImages: true,
+                showSeparator: false,
+                imageScale: 1.0,
+                gapScale: 1.0,
+                borderRadius: 6,
+                enableMaxWidth: false
+            },
+            medium: {
+                textSize: 16,
+                height: 72,
+                showImages: true,
+                showSeparator: false,
+                imageScale: 1.2,
+                gapScale: 1.15,
+                borderRadius: 7,
+                enableMaxWidth: false
+            },
+            large: {
+                textSize: 20,
+                height: 260,
+                showImages: true,
+                showSeparator: false,
+                imageScale: 2,
+                gapScale: 1.3,
+                borderRadius: 8,
+                enableMaxWidth: true,
+                maxItemWidth: 440
+            }
+        };
+
+        function applyPreset(presetName) {
+            const preset = presets[presetName];
+            if (!preset) return;
+
+            // Apply preset values to controls
+            controls.textSize.value = preset.textSize;
+            controls.height.value = preset.height;
+            controls.imageScale.value = preset.imageScale;
+            controls.gapScale.value = preset.gapScale;
+            controls.borderRadius.value = preset.borderRadius;
+            controls.enableMaxWidth.checked = preset.enableMaxWidth;
+            
+            // Apply showImages setting from preset
+            controls.showImages.checked = preset.showImages;
+            
+            // Apply showSeparator setting from preset
+            controls.showSeparator.checked = preset.showSeparator;
+            
+            // Apply maxItemWidth if enableMaxWidth is true and maxItemWidth is defined
+            if (preset.enableMaxWidth && preset.maxItemWidth) {
+                controls.maxItemWidth.value = parseInt(preset.maxItemWidth);
+            }
+
+            // Update ticker and displays
+            updateTicker();
+            updateRangeDisplays();
+            updateMaxWidthVisibility();
+
+            // Update active preset button
+            updateActivePreset(presetName);
+        }
+
+        function updateActivePreset(activePreset = null) {
+            const presetBtns = document.querySelectorAll('.preset-btn');
+            
+            if (activePreset) {
+                // Set active preset
+                presetBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-preset') === activePreset) {
+                        btn.classList.add('active');
+                    }
+                });
+            } else {
+                // Check if current settings match any preset
+                let matchingPreset = null;
+                for (const [presetName, preset] of Object.entries(presets)) {
+                    const matches = 
+                        parseInt(controls.textSize.value) === preset.textSize &&
+                        parseInt(controls.height.value) === preset.height &&
+                        parseFloat(controls.imageScale.value) === preset.imageScale &&
+                        parseFloat(controls.gapScale.value) === preset.gapScale &&
+                        parseInt(controls.borderRadius.value) === preset.borderRadius &&
+                        controls.enableMaxWidth.checked === preset.enableMaxWidth &&
+                        controls.showImages.checked === preset.showImages &&
+                        controls.showSeparator.checked === preset.showSeparator &&
+                        // If enableMaxWidth is true, also check maxItemWidth
+                        (!preset.enableMaxWidth || !preset.maxItemWidth || 
+                         parseInt(controls.maxItemWidth.value) === parseInt(preset.maxItemWidth));
+                    
+                    if (matches) {
+                        matchingPreset = presetName;
+                        break;
+                    }
+                }
+
+                presetBtns.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (matchingPreset && btn.getAttribute('data-preset') === matchingPreset) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        }
+
+        function updateTicker() {
+            // Update ticker attributes to trigger the component's built-in styling
+            ticker.setAttribute('data-text-color', controls.textColor.value);
+            ticker.setAttribute('data-background-color', controls.bgColor.value);
+            ticker.setAttribute('data-border-color', controls.borderColor.value);
+            ticker.setAttribute('data-text-size', controls.textSize.value + 'px');
+            ticker.setAttribute('data-height', controls.height.value + 'px');
+            ticker.setAttribute('data-speed', controls.speed.value);
+            ticker.setAttribute('data-position', controls.position.value);
+            ticker.setAttribute('data-show-images', controls.showImages.checked);
+            ticker.setAttribute('data-show-separator', controls.showSeparator.checked);
+            ticker.setAttribute('data-image-scale', controls.imageScale.value);
+            ticker.setAttribute('data-gap-scale', controls.gapScale.value);
+            ticker.setAttribute('data-border-radius', controls.borderRadius.value + 'px');
+            
+            // Set max item width if provided, otherwise remove the attribute
+            if (controls.enableMaxWidth.checked) {
+                ticker.setAttribute('data-max-item-width', controls.maxItemWidth.value + 'px');
+            } else {
+                ticker.removeAttribute('data-max-item-width');
+            }
+            
+            // Set font family if provided, otherwise remove the attribute to use default
+            if (controls.fontFamily.value.trim()) {
+                ticker.setAttribute('data-font-family', controls.fontFamily.value.trim());
+            } else {
+                ticker.removeAttribute('data-font-family');
+            }
+
+            if (controls.position.value === 'fixed') {
+                ticker.setAttribute('data-fixed-position', controls.fixedPosition.value);
+                ticker.removeAttribute('data-static-position');
+                ticker.removeAttribute('data-sticky');
+            } else {
+                // Store current static position and sticky values
+                const currentStaticPos = ticker.getAttribute('data-static-position');
+                const newStaticPos = controls.staticPosition.value;
+                
+                ticker.setAttribute('data-static-position', newStaticPos);
+                ticker.setAttribute('data-sticky', controls.sticky.value);
+                ticker.removeAttribute('data-fixed-position');
+                
+                // Only move DOM element if static position actually changed
+                // This prevents breaking sticky positioning when only sticky setting changes
+                if (currentStaticPos !== newStaticPos) {
+                    // For static positioning, move the ticker to the selected location
+                    let targetElement;
+                    
+                    switch(newStaticPos) {
+                        case 'after-header':
+                            targetElement = document.querySelector('header');
+                            if (targetElement && targetElement.nextSibling) {
+                                targetElement.parentNode.insertBefore(ticker, targetElement.nextSibling);
+                            } else if (targetElement) {
+                                targetElement.parentNode.appendChild(ticker);
+                            }
+                            break;
+                        case 'after-content':
+                            targetElement = document.querySelector('main');
+                            if (targetElement && targetElement.nextSibling) {
+                                targetElement.parentNode.insertBefore(ticker, targetElement.nextSibling);
+                            } else if (targetElement) {
+                                targetElement.parentNode.appendChild(ticker);
+                            }
+                            break;
+                        case 'before-footer':
+                            targetElement = document.querySelector('footer');
+                            if (targetElement) {
+                                targetElement.parentNode.insertBefore(ticker, targetElement);
+                            }
+                            break;
+                    }
+                }
+            }
+            
+            // Trigger the component's built-in style and positioning methods
+            ticker.applyStyles();
+            ticker.applyPositioning();
+            
+            // Update control visibility and placement indicators
+            updateControlVisibility();
+            
+            // Update code output
+            updateCodeOutput();
+        }
+
+        function updateCodeOutput() {
+            let code = '<fomo-ticker\n';
+            code += `  data-text-color="${controls.textColor.value}"\n`;
+            code += `  data-background-color="${controls.bgColor.value}"\n`;
+            code += `  data-border-color="${controls.borderColor.value}"\n`;
+            code += `  data-text-size="${controls.textSize.value}px"\n`;
+            code += `  data-height="${controls.height.value}px"\n`;
+            code += `  data-speed="${controls.speed.value}"\n`;
+            code += `  data-position="${controls.position.value}"`;
+            code += `\n  data-show-images="${controls.showImages.checked}"`;
+            code += `\n  data-show-separator="${controls.showSeparator.checked}"`;
+            code += `\n  data-image-scale="${controls.imageScale.value}"`;
+            code += `\n  data-gap-scale="${controls.gapScale.value}"`;
+            code += `\n  data-border-radius="${controls.borderRadius.value}px"`;
+            
+            if (controls.enableMaxWidth.checked) {
+                code += `\n  data-max-item-width="${controls.maxItemWidth.value}px"`;
+            }
+            
+            if (controls.fontFamily.value.trim()) {
+                code += `\n  data-font-family="${controls.fontFamily.value.trim()}"`;
+            }
+            
+            if (controls.position.value === 'fixed') {
+                code += `\n  data-fixed-position="${controls.fixedPosition.value}"`;
+            }
+            
+            if (controls.position.value === 'static') {
+                code += `\n  data-static-position="${controls.staticPosition.value}"`;
+                if (controls.sticky.value !== 'none') {
+                    code += `\n  data-sticky="${controls.sticky.value}"`;
+                }
+            }
+            
+            code += '\n></fomo-ticker>';
+            document.getElementById('codeOutput').textContent = code;
+        }
+
+        function updateControlVisibility() {
+            const fixedGroup = document.getElementById('fixedPositionGroup');
+            const staticGroup = document.getElementById('staticPositionGroup');
+            const stickyGroup = document.getElementById('stickyGroup');
+            const stickySelect = document.getElementById('sticky');
+            const stickyLabel = stickyGroup.querySelector('label');
+            
+            fixedGroup.style.display = controls.position.value === 'fixed' ? 'flex' : 'none';
+            staticGroup.style.display = controls.position.value === 'static' ? 'flex' : 'none';
+            
+            // Always show sticky group but enable/disable based on position type
+            stickyGroup.style.display = 'flex';
+            
+            if (controls.position.value === 'fixed') {
+                stickySelect.disabled = true;
+                stickySelect.style.opacity = '0.6';
+                stickySelect.style.cursor = 'not-allowed';
+                stickyLabel.style.opacity = '0.6';
+                stickyLabel.style.color = '#999';
+            } else {
+                stickySelect.disabled = false;
+                stickySelect.style.opacity = '1';
+                stickySelect.style.cursor = 'pointer';
+                stickyLabel.style.opacity = '1';
+                stickyLabel.style.color = '#555';
+            }
+            
+            // Show/hide placement indicators
+            updatePlacementIndicators();
+        }
+
+        function updatePlacementIndicators() {
+            const indicators = document.querySelectorAll('.static-placement-indicator');
+            
+            if (controls.position.value === 'static') {
+                // Show all indicators
+                indicators.forEach(indicator => {
+                    indicator.style.display = 'block';
+                });
+            } else {
+                // Hide all indicators in fixed mode
+                indicators.forEach(indicator => {
+                    indicator.style.display = 'none';
+                });
+            }
+        }
+
+        function updateRangeDisplays() {
+            document.getElementById('textSizeDisplay').textContent = controls.textSize.value + 'px';
+            document.getElementById('heightDisplay').textContent = controls.height.value + 'px';
+            document.getElementById('speedDisplay').textContent = controls.speed.value;
+            document.getElementById('imageScaleDisplay').textContent = controls.imageScale.value + 'x';
+            document.getElementById('gapScaleDisplay').textContent = controls.gapScale.value + 'x';
+            document.getElementById('borderRadiusDisplay').textContent = controls.borderRadius.value + 'px';
+            document.getElementById('maxItemWidthDisplay').textContent = controls.maxItemWidth.value + 'px';
+        }
+
+        function updateMaxWidthVisibility() {
+            const sliderGroup = document.getElementById('maxWidthSliderGroup');
+            sliderGroup.style.display = controls.enableMaxWidth.checked ? 'flex' : 'none';
+        }
+
+        function copyCode() {
+            const codeOutput = document.getElementById('codeOutput');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeOutput.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show feedback
+            const copyBtn = document.querySelector('.copy-btn');
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = 'Copied!';
+            copyBtn.style.background = '#28a745';
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+                copyBtn.style.background = '#4299e1';
+            }, 2000);
+        }
+
+        // Add event listeners
+        Object.values(controls).forEach(control => {
+            control.addEventListener('input', () => {
+                updateTicker();
+                updateRangeDisplays();
+                updateMaxWidthVisibility();
+                updateActivePreset();
+            });
+            control.addEventListener('change', () => {
+                updateTicker();
+                updateRangeDisplays();
+                updateMaxWidthVisibility();
+                updateActivePreset();
+            });
+        });
+
+        // Add preset button event listeners
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const presetName = btn.getAttribute('data-preset');
+                applyPreset(presetName);
+            });
+        });
+
+        // Initial setup
+        updateTicker();
+        updateRangeDisplays();
+        updateMaxWidthVisibility();
+        updateActivePreset();
+    </script>
 </body>
 </html>

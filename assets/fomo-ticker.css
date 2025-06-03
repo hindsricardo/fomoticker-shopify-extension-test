@@ -1,21 +1,23 @@
 fomo-ticker {
   display: block;
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+  /* Remove default position: fixed to allow JavaScript control */
+  /* position: fixed; */
+  /* left: 0; */
+  /* right: 0; */
+  /* z-index: 1000; */
   overflow: hidden;
   border-top: 1px solid;
   border-bottom: 1px solid;
 }
 
-fomo-ticker[data-position="header"] {
+/* These selectors are now handled by JavaScript positioning */
+/* fomo-ticker[data-position="header"] {
   top: 0;
 }
 
 fomo-ticker[data-position="footer"] {
   bottom: 0;
-}
+} */
 
 .fomo-ticker__content {
   display: flex;
@@ -24,11 +26,58 @@ fomo-ticker[data-position="footer"] {
   white-space: nowrap;
   animation: marquee linear infinite;
   font-weight: 500;
+  gap: var(--fomo-content-gap, 10px);
+  cursor: default;
+}
+
+.fomo-ticker__link {
+  text-decoration: none;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fomo-link-gap, 8px);
+  max-width: var(--fomo-max-item-width, none);
+  flex-shrink: 0;
+  white-space: normal;
+  padding: var(--fomo-link-padding, 4px);
+  border-radius: var(--fomo-border-radius, 6px);
+}
+
+.fomo-ticker__link:hover {
+  background-color: var(--fomo-hover-bg-color, rgba(255, 255, 255, 0.1));
+  text-decoration: none;
+}
+
+.fomo-ticker__link:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.fomo-ticker__image {
+  width: var(--fomo-image-size, 24px);
+  height: var(--fomo-image-size, 24px);
+  border-radius: var(--fomo-border-radius, 6px);
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: var(--fomo-show-images, inline-flex);
+}
+
+.fomo-ticker__text {
+  display: block;
+}
+
+.fomo-ticker__separator {
+  display: inline;
+  color: inherit;
+  opacity: var(--fomo-show-separator, 1);
 }
 
 @keyframes marquee {
   0% {
-    transform: translateX(100%);
+    transform: translateX(0%);
   }
   100% {
     transform: translateX(-100%);
