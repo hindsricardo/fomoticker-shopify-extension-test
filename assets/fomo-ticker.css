@@ -24,11 +24,46 @@ fomo-ticker[data-position="footer"] {
   white-space: nowrap;
   animation: marquee linear infinite;
   font-weight: 500;
+  gap: 10px;
+  cursor: default;
+}
+
+.fomo-ticker__link {
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fomo-ticker__link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.fomo-ticker__link:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.fomo-ticker__image {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.fomo-ticker__text {
+  white-space: nowrap;
 }
 
 @keyframes marquee {
   0% {
-    transform: translateX(100%);
+    transform: translateX(0%);
   }
   100% {
     transform: translateX(-100%);
