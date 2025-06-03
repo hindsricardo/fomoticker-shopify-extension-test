@@ -52,6 +52,9 @@ class FomoTicker extends HTMLElement {
     const contentGap = Math.round(textSize * 1 * gapScale); // Gap is 1x the font size, scaled by gapScale
     const linkGap = Math.round(textSize * 0.6 * gapScale); // Gap between image and text is 0.6x font size, scaled by gapScale
 
+    // Calculate hover background color (lighter version of background)
+    const hoverBgColor = this.lightenColor(backgroundColor, 0.2);
+
     this.style.backgroundColor = backgroundColor;
     this.style.borderColor = borderColor;
     this.style.height = height;
@@ -65,6 +68,7 @@ class FomoTicker extends HTMLElement {
     this.style.setProperty('--fomo-content-gap', contentGap + 'px');
     this.style.setProperty('--fomo-link-gap', linkGap + 'px');
     this.style.setProperty('--fomo-border-radius', borderRadius);
+    this.style.setProperty('--fomo-hover-bg-color', hoverBgColor);
     this.style.setProperty('--fomo-show-images', showImages ? 'inline-flex' : 'none');
     this.style.setProperty('--fomo-show-separator', showSeparator ? 'inline' : 'none');
     this.style.setProperty('--fomo-max-item-width', maxItemWidth || 'none');
@@ -97,6 +101,26 @@ class FomoTicker extends HTMLElement {
     });
   }
 
+  // Helper method to lighten a color
+  lightenColor(color, amount) {
+    // Remove # if present
+    const hex = color.replace('#', '');
+    
+    // Parse RGB values
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    
+    // Lighten each component
+    const newR = Math.min(255, Math.round(r + (255 - r) * amount));
+    const newG = Math.min(255, Math.round(g + (255 - g) * amount));
+    const newB = Math.min(255, Math.round(b + (255 - b) * amount));
+    
+    // Convert back to hex
+    const toHex = (n) => n.toString(16).padStart(2, '0');
+    return `#${toHex(newR)}${toHex(newG)}${toHex(newB)}`;
+  }
+
   applyPositioning() {
     const positionType = this.dataset.position || 'static'; // 'static' or 'fixed'
     const fixedPosition = this.dataset.fixedPosition || 'bottom'; // 'top', 'bottom'
@@ -104,6 +128,18 @@ class FomoTicker extends HTMLElement {
     const zIndex = this.dataset.zIndex || '1000';
     const margin = this.dataset.margin || '0';
     const sticky = this.dataset.sticky || 'none'; // 'none', 'top', 'bottom'
+
+    // Reset all positioning styles first to avoid conflicts
+    this.style.position = '';
+    this.style.top = '';
+    this.style.bottom = '';
+    this.style.left = '';
+    this.style.right = '';
+    this.style.width = '';
+    this.style.transform = '';
+    this.style.zIndex = '';
+    this.style.margin = '';
+    this.style.boxShadow = '';
 
     if (positionType === 'fixed') {
       this.style.position = 'fixed';
@@ -165,25 +201,37 @@ class FomoTicker extends HTMLElement {
           this.style.top = 'auto';
         }
         
+        // For sticky, we want full width but don't set left/right to avoid conflicts
+        this.style.width = '100%';
+        this.style.transform = 'none';
+        
         // Add shadow for better visibility when sticky
         this.style.boxShadow = this.dataset.boxShadow || '0 2px 10px rgba(0,0,0,0.1)';
+        
+        // Apply margin for sticky positioning
+        if (margin !== '0') {
+          this.style.margin = margin;
+        } else {
+          this.style.margin = '0';
+        }
+        
       } else {
         // Regular static positioning
         this.style.position = 'static';
         this.style.zIndex = 'auto';
         this.style.boxShadow = 'none';
-      }
-      
-      this.style.left = 'auto';
-      this.style.right = 'auto';
-      this.style.transform = 'none';
-      this.style.width = '100%';
-      
-      // Apply margin for static positioning
-      if (margin !== '0') {
-        this.style.margin = margin;
-      } else {
-        this.style.margin = '0';
+        
+        this.style.left = 'auto';
+        this.style.right = 'auto';
+        this.style.transform = 'none';
+        this.style.width = '100%';
+        
+        // Apply margin for static positioning
+        if (margin !== '0') {
+          this.style.margin = margin;
+        } else {
+          this.style.margin = '0';
+        }
       }
     }
   }

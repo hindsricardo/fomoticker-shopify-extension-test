@@ -15,10 +15,6 @@
             box-sizing: border-box;
         }
 
-        html {
-            overflow-x: hidden;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
@@ -26,7 +22,6 @@
             background: #ffffff;
             padding: 0;
             margin: 0;
-            overflow-x: hidden;
             width: 100%;
         }
 
@@ -559,6 +554,7 @@
         data-height="48px"
         data-speed="50"
         data-position="static"
+        data-sticky="none"
         data-show-images="true"
         data-show-separator="true"
         data-border-radius="6px"
@@ -671,16 +667,21 @@
                     <div class="range-display" id="gapScaleDisplay">1.0x</div>
                 </div>
                 <div class="control-group">
-                    <label for="borderRadius">Image Radius</label>
+                    <label for="borderRadius">Radius</label>
                     <input type="range" id="borderRadius" min="0" max="20" value="6">
                     <div class="range-display" id="borderRadiusDisplay">6px</div>
                 </div>
                 <div class="control-group">
-                    <label for="maxItemWidth">Max Item Width</label>
-                    <input type="number" id="maxItemWidth" placeholder="auto" min="100" max="800" step="10">
+                    <label for="enableMaxWidth">Max Item Width</label>
+                    <input type="checkbox" id="enableMaxWidth">
+                </div>
+                <div class="control-group" id="maxWidthSliderGroup" style="display: none;">
+                    <label for="maxItemWidth">Width</label>
+                    <input type="range" id="maxItemWidth" min="100" max="600" step="10" value="300">
+                    <div class="range-display" id="maxItemWidthDisplay">300px</div>
                 </div>
                 <div style="font-size: 0.6rem; color: #666; margin: -0.2rem 0 0.4rem 0; padding-left: 65px;">
-                    Leave empty for auto-width items
+                    Enable to limit each item's width
                 </div>
             </div>
 
@@ -864,6 +865,7 @@
             imageScale: document.getElementById('imageScale'),
             gapScale: document.getElementById('gapScale'),
             borderRadius: document.getElementById('borderRadius'),
+            enableMaxWidth: document.getElementById('enableMaxWidth'),
             maxItemWidth: document.getElementById('maxItemWidth')
         };
 
@@ -883,7 +885,7 @@
             ticker.setAttribute('data-border-radius', controls.borderRadius.value + 'px');
             
             // Set max item width if provided, otherwise remove the attribute
-            if (controls.maxItemWidth.value.trim()) {
+            if (controls.enableMaxWidth.checked) {
                 ticker.setAttribute('data-max-item-width', controls.maxItemWidth.value + 'px');
             } else {
                 ticker.removeAttribute('data-max-item-width');
@@ -901,37 +903,44 @@
                 ticker.removeAttribute('data-static-position');
                 ticker.removeAttribute('data-sticky');
             } else {
-                ticker.setAttribute('data-static-position', controls.staticPosition.value);
+                // Store current static position and sticky values
+                const currentStaticPos = ticker.getAttribute('data-static-position');
+                const newStaticPos = controls.staticPosition.value;
+                
+                ticker.setAttribute('data-static-position', newStaticPos);
                 ticker.setAttribute('data-sticky', controls.sticky.value);
                 ticker.removeAttribute('data-fixed-position');
                 
-                // For static positioning, move the ticker to the selected location
-                const staticPos = controls.staticPosition.value;
-                let targetElement;
-                
-                switch(staticPos) {
-                    case 'after-header':
-                        targetElement = document.querySelector('header');
-                        if (targetElement && targetElement.nextSibling) {
-                            targetElement.parentNode.insertBefore(ticker, targetElement.nextSibling);
-                        } else if (targetElement) {
-                            targetElement.parentNode.appendChild(ticker);
-                        }
-                        break;
-                    case 'after-content':
-                        targetElement = document.querySelector('main');
-                        if (targetElement && targetElement.nextSibling) {
-                            targetElement.parentNode.insertBefore(ticker, targetElement.nextSibling);
-                        } else if (targetElement) {
-                            targetElement.parentNode.appendChild(ticker);
-                        }
-                        break;
-                    case 'before-footer':
-                        targetElement = document.querySelector('footer');
-                        if (targetElement) {
-                            targetElement.parentNode.insertBefore(ticker, targetElement);
-                        }
-                        break;
+                // Only move DOM element if static position actually changed
+                // This prevents breaking sticky positioning when only sticky setting changes
+                if (currentStaticPos !== newStaticPos) {
+                    // For static positioning, move the ticker to the selected location
+                    let targetElement;
+                    
+                    switch(newStaticPos) {
+                        case 'after-header':
+                            targetElement = document.querySelector('header');
+                            if (targetElement && targetElement.nextSibling) {
+                                targetElement.parentNode.insertBefore(ticker, targetElement.nextSibling);
+                            } else if (targetElement) {
+                                targetElement.parentNode.appendChild(ticker);
+                            }
+                            break;
+                        case 'after-content':
+                            targetElement = document.querySelector('main');
+                            if (targetElement && targetElement.nextSibling) {
+                                targetElement.parentNode.insertBefore(ticker, targetElement.nextSibling);
+                            } else if (targetElement) {
+                                targetElement.parentNode.appendChild(ticker);
+                            }
+                            break;
+                        case 'before-footer':
+                            targetElement = document.querySelector('footer');
+                            if (targetElement) {
+                                targetElement.parentNode.insertBefore(ticker, targetElement);
+                            }
+                            break;
+                    }
                 }
             }
             
@@ -961,7 +970,7 @@
             code += `\n  data-gap-scale="${controls.gapScale.value}"`;
             code += `\n  data-border-radius="${controls.borderRadius.value}px"`;
             
-            if (controls.maxItemWidth.value.trim()) {
+            if (controls.enableMaxWidth.checked) {
                 code += `\n  data-max-item-width="${controls.maxItemWidth.value}px"`;
             }
             
@@ -1001,7 +1010,6 @@
                 stickySelect.disabled = true;
                 stickySelect.style.opacity = '0.6';
                 stickySelect.style.cursor = 'not-allowed';
-                stickySelect.value = 'none'; // Reset to none when disabled
                 stickyLabel.style.opacity = '0.6';
                 stickyLabel.style.color = '#999';
             } else {
@@ -1039,6 +1047,12 @@
             document.getElementById('imageScaleDisplay').textContent = controls.imageScale.value + 'x';
             document.getElementById('gapScaleDisplay').textContent = controls.gapScale.value + 'x';
             document.getElementById('borderRadiusDisplay').textContent = controls.borderRadius.value + 'px';
+            document.getElementById('maxItemWidthDisplay').textContent = controls.maxItemWidth.value + 'px';
+        }
+
+        function updateMaxWidthVisibility() {
+            const sliderGroup = document.getElementById('maxWidthSliderGroup');
+            sliderGroup.style.display = controls.enableMaxWidth.checked ? 'flex' : 'none';
         }
 
         function copyCode() {
@@ -1066,16 +1080,19 @@
             control.addEventListener('input', () => {
                 updateTicker();
                 updateRangeDisplays();
+                updateMaxWidthVisibility();
             });
             control.addEventListener('change', () => {
                 updateTicker();
                 updateRangeDisplays();
+                updateMaxWidthVisibility();
             });
         });
 
         // Initial setup
         updateTicker();
         updateRangeDisplays();
+        updateMaxWidthVisibility();
     </script>
 </body>
 </html>

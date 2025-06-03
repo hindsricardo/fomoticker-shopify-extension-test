@@ -1,21 +1,23 @@
 fomo-ticker {
   display: block;
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+  /* Remove default position: fixed to allow JavaScript control */
+  /* position: fixed; */
+  /* left: 0; */
+  /* right: 0; */
+  /* z-index: 1000; */
   overflow: hidden;
   border-top: 1px solid;
   border-bottom: 1px solid;
 }
 
-fomo-ticker[data-position="header"] {
+/* These selectors are now handled by JavaScript positioning */
+/* fomo-ticker[data-position="header"] {
   top: 0;
 }
 
 fomo-ticker[data-position="footer"] {
   bottom: 0;
-}
+} */
 
 .fomo-ticker__content {
   display: flex;
@@ -30,7 +32,7 @@ fomo-ticker[data-position="footer"] {
 
 .fomo-ticker__link {
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -38,11 +40,13 @@ fomo-ticker[data-position="footer"] {
   max-width: var(--fomo-max-item-width, none);
   flex-shrink: 0;
   white-space: normal;
+  padding: 4px 4px;
+  border-radius: var(--fomo-border-radius, 6px);
 }
 
 .fomo-ticker__link:hover {
-  opacity: 0.8;
-  text-decoration: underline;
+  background-color: var(--fomo-hover-bg-color, rgba(255, 255, 255, 0.1));
+  text-decoration: none;
 }
 
 .fomo-ticker__link:focus {
