@@ -40,7 +40,7 @@ fomo-ticker[data-position="footer"] {
   max-width: var(--fomo-max-item-width, none);
   flex-shrink: 0;
   white-space: normal;
-  padding: 4px 4px;
+  padding: var(--fomo-link-padding, 4px);
   border-radius: var(--fomo-border-radius, 6px);
 }
 

@@ -51,6 +51,7 @@ class FomoTicker extends HTMLElement {
     const imageSize = Math.round(baseImageSize * imageScale); // Apply user scaling
     const contentGap = Math.round(textSize * 1 * gapScale); // Gap is 1x the font size, scaled by gapScale
     const linkGap = Math.round(textSize * 0.6 * gapScale); // Gap between image and text is 0.6x font size, scaled by gapScale
+    const linkPadding = Math.round(textSize * 0.3 * gapScale); // Padding is 0.3x font size, scaled by gapScale
 
     // Calculate hover background color (lighter version of background)
     const hoverBgColor = this.lightenColor(backgroundColor, 0.2);
@@ -67,6 +68,7 @@ class FomoTicker extends HTMLElement {
     this.style.setProperty('--fomo-image-size', imageSize + 'px');
     this.style.setProperty('--fomo-content-gap', contentGap + 'px');
     this.style.setProperty('--fomo-link-gap', linkGap + 'px');
+    this.style.setProperty('--fomo-link-padding', linkPadding + 'px');
     this.style.setProperty('--fomo-border-radius', borderRadius);
     this.style.setProperty('--fomo-hover-bg-color', hoverBgColor);
     this.style.setProperty('--fomo-show-images', showImages ? 'inline-flex' : 'none');
